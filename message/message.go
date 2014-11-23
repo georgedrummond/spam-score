@@ -1,17 +1,15 @@
 package message
 
 import (
-	// "code.google.com/p/go-uuid/uuid"
-	"github.com/garyburd/redigo/redis"
+	"code.google.com/p/go-uuid/uuid"
+	"github.com/hoisie/redis"
 	"github.com/saintienn/go-spamc"
 	"os"
 )
 
 var (
-	redis_url        = os.Getenv("REDIS_URL")
+	client           redis.Client
 	spamassassin_url = os.Getenv("SPAMASSASSIN_URL")
-
-	redis_connection, err = redis.Dial("tcp", redis_url)
 )
 
 type Message struct {
@@ -21,8 +19,14 @@ type Message struct {
 	Result    interface{}
 }
 
+func New() Message {
+	message := Message{MessageID: uuid.New()}
+
+	return message
+}
+
 func Find(uuid string) {
-	redis_connection.Send("GET", uuid)
+	//redis_connection.Send("GET", uuid)
 }
 
 func (m *Message) SpamCheck() {
